@@ -11,7 +11,6 @@ A feature-rich Discord bot with both slash and prefix commands, MongoDB integrat
 - ✅ Moderation Commands
 - ✅ Fun Commands
 - ✅ Utility Commands
-- ✅ Economy System
 - ✅ Music Playback (YouTube/Spotify)
 - ✅ Voice Channel Integration
 - ✅ Clean Code Structure
@@ -133,21 +132,6 @@ src/
 - `/nickname` - Change user's nickname
 - `/roleinfo` - Get role information
 
-**Economy Commands:**
-- `/balance` - Check your balance
-- `/work` - Work to earn money (1h cooldown)
-- `/daily` - Claim daily reward with streak bonus
-- `/shop` - View server shop items
-- `/buy` - Buy items from shop
-- `/inventory` - View your inventory
-- `/transfer` - Transfer money to another user
-- `/gamble` - Gamble money (dice, coin, slots, number)
-- `/rob` - Attempt to rob another user
-- `/deposit` - Deposit money to bank (safe from robbing)
-- `/withdraw` - Withdraw money from bank
-- `/leaderboard` - Show richest users
-- `/shopmanage` - Manage shop items (Admin only)
-
 **Music Commands (requires voice channel):**
 - `/play` - Play a song from YouTube/Spotify or add to queue
 - `/skip` - Skip current song (or multiple songs at once)
@@ -163,7 +147,6 @@ src/
 - **Info**: Information about users, servers, etc.
 - **Moderation**: Server moderation tools
 - **Fun**: Entertainment commands
-- **Economy**: Virtual economy with shops, gambling, and banking
 - **Music**: Audio playback with YouTube/Spotify support via Riffy/Lavalink
 
 ## Adding New Commands
@@ -206,7 +189,6 @@ module.exports = {
 - **Global Commands**: This bot uses global slash commands which may take up to 1 hour to propagate across all servers
 - **Permissions**: Moderation commands require appropriate Discord permissions
 - **Categories**: Create new folders in `src/commands/` for new categories
-- **Database**: MongoDB is used for storing server and user data
 - **Music System**: Powered by Riffy/Lavalark for high-quality audio streaming
 - **Voice Requirements**: Music commands require bot to have proper voice channel permissions
 - **Dependencies**: Requires Lavalark server connection for music functionality
