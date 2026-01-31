@@ -15,17 +15,17 @@ function formatDuration(milliseconds) {
 }
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'queue',
-  description: 'Show the current music queue',
+  description: 'Hiển thị hàng chờ nhạc hiện tại',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('Show the current music queue')
+    .setDescription('Hiển thị hàng chờ nhạc hiện tại')
     .addIntegerOption(option => 
       option.setName('page')
-        .setDescription('Page number of the queue')
+        .setDescription('Số trang của hàng chờ')
         .setMinValue(1)
         .setMaxValue(10)),
 
@@ -33,7 +33,7 @@ module.exports = {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to see the queue!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để xem hàng chờ!', 
         flags: [64]
       });
     }
@@ -41,7 +41,7 @@ module.exports = {
     const player = client.riffy?.players.get(message.guild.id);
     if (!player || (!player.current && player.queue.size === 0)) {
       return message.reply({ 
-        content: '❌ The queue is empty! Add some songs with `!play`', 
+        content: '❌ Hàng chờ trống! Thêm một số bài hát bằng `!play`', 
         flags: [64]
       });
     }
@@ -58,44 +58,44 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: '🎵 Music Queue',
-        description: `📊 Total songs: **${player.queue.size}**`,
+        title: '🎵 Hàng chờ Nhạc',
+        description: `📊 Tổng bài hát: **${player.queue.size}**`,
         fields: [],
         thumbnail: currentTrack ? { url: currentTrack.info.thumbnail } : null,
         timestamp: new Date().toISOString()
       };
 
-      // Add currently playing if exists
+      // Thêm hiện đang phát nếu tồn tại
       if (currentTrack) {
         embed.fields.push({
-          name: '🎵 Currently Playing',
-          value: `**${currentTrack.info.title}**\n👤 ${currentTrack.info.author}\n⏱️ ${formatDuration(currentTrack.info.length)}\n👤 Requested by: ${currentTrack.info.requester.username}`,
+          name: '🎵 Đang phát',
+          value: `**${currentTrack.info.title}**\n👤 ${currentTrack.info.author}\n⏱️ ${formatDuration(currentTrack.info.length)}\n👤 Được yêu cầu bởi: ${currentTrack.info.requester.username}`,
           inline: false
         });
       }
 
-      // Add queue items
+      // Thêm các mục hàng chờ
       if (queue.length > 0) {
         const queueList = queue.map((track, index) => 
           `**${start + index + 1}.** ${track.info.title} - ${track.info.author}`
         ).join('\n');
 
         embed.fields.push({
-          name: `📋 Queue (Page ${page}/${totalPages})`,
-          value: queueList || 'No more songs in queue',
+          name: `📋 Hàng chờ (Trang ${page}/${totalPages})`,
+          value: queueList || 'Không có thêm bài hát trong hàng chờ',
           inline: false
         });
       }
 
       embed.footer = { 
-        text: totalPages > 1 ? `Page ${page} of ${totalPages}` : 'Queue' 
+        text: totalPages > 1 ? `Trang ${page} của ${totalPages}` : 'Hàng chờ' 
       };
 
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Queue error:', error);
-      await message.reply({ content: '❌ There was an error getting the queue!', flags: [64] });
+      console.error('Lỗi hàng chờ:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi lấy hàng chờ!', flags: [64] });
     }
   },
 
@@ -103,7 +103,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to see the queue!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để xem hàng chờ!', 
         flags: [64]
       });
     }
@@ -111,7 +111,7 @@ module.exports = {
     const player = client.riffy?.players.get(interaction.guild.id);
     if (!player || (!player.current && player.queue.size === 0)) {
       return interaction.reply({ 
-        content: '❌ The queue is empty! Add some songs with `/play`', 
+        content: '❌ Hàng chờ trống! Thêm một số bài hát bằng `/play`', 
         flags: [64]
       });
     }
@@ -128,44 +128,44 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: '🎵 Music Queue',
-        description: `📊 Total songs: **${player.queue.size}**`,
+        title: '🎵 Hàng chờ Nhạc',
+        description: `📊 Tổng bài hát: **${player.queue.size}**`,
         fields: [],
         thumbnail: currentTrack ? { url: currentTrack.info.thumbnail } : null,
         timestamp: new Date().toISOString()
       };
 
-      // Add currently playing if exists
+      // Thêm hiện đang phát nếu tồn tại
       if (currentTrack) {
         embed.fields.push({
-          name: '🎵 Currently Playing',
-          value: `**${currentTrack.info.title}**\n👤 ${currentTrack.info.author}\n⏱️ ${formatDuration(currentTrack.info.length)}\n👤 Requested by: ${currentTrack.info.requester.username}`,
+          name: '🎵 Đang phát',
+          value: `**${currentTrack.info.title}**\n👤 ${currentTrack.info.author}\n⏱️ ${formatDuration(currentTrack.info.length)}\n👤 Được yêu cầu bởi: ${currentTrack.info.requester.username}`,
           inline: false
         });
       }
 
-      // Add queue items
+      // Thêm các mục hàng chờ
       if (queue.length > 0) {
         const queueList = queue.map((track, index) => 
           `**${start + index + 1}.** ${track.info.title} - ${track.info.author}`
         ).join('\n');
 
         embed.fields.push({
-          name: `📋 Queue (Page ${page}/${totalPages})`,
-          value: queueList || 'No more songs in queue',
+          name: `📋 Hàng chờ (Trang ${page}/${totalPages})`,
+          value: queueList || 'Không có thêm bài hát trong hàng chờ',
           inline: false
         });
       }
 
       embed.footer = { 
-        text: totalPages > 1 ? `Page ${page} of ${totalPages}` : 'Queue' 
+        text: totalPages > 1 ? `Trang ${page} của ${totalPages}` : 'Hàng chờ' 
       };
 
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Queue error:', error);
-      await interaction.reply({ content: '❌ There was an error getting the queue!', flags: [64] });
+      console.error('Lỗi hàng chờ:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi lấy hàng chờ!', flags: [64] });
     }
   }
 };

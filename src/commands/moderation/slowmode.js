@@ -1,28 +1,28 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'slowmode',
-  description: 'Set slowmode for the channel',
+  description: 'Đặt chế độ chậm cho kênh',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('slowmode')
-    .setDescription('Set slowmode for the channel')
+    .setDescription('Đặt chế độ chậm cho kênh')
     .addStringOption(option => 
       option.setName('duration')
-        .setDescription('Slowmode duration (e.g., 5s, 1m, off)')
+        .setDescription('Thời lượng chế độ chậm (ví dụ: 5s, 1m, off)')
         .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.ManageChannels)) {
-      return message.reply({ content: 'You do not have permission to manage channels!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền quản lý kênh!', flags: [64] });
     }
 
     const duration = args[0];
     if (!duration) {
-      return message.reply({ content: 'Please specify a duration (e.g., 5s, 1m, off)!', flags: [64] });
+      return message.reply({ content: 'Vui lòng chỉ định một thời lượng (ví dụ: 5s, 1m, off)!', flags: [64] });
     }
 
     let seconds = 0;
@@ -32,7 +32,7 @@ module.exports = {
     } else {
       const match = duration.match(/^(\d+)([smhd])$/);
       if (!match) {
-        return message.reply({ content: 'Invalid duration! Use: 5s, 1m, off', flags: [64] });
+        return message.reply({ content: 'Thời lượng không hợp lệ! Sử dụng: 5s, 1m, off', flags: [64] });
       }
 
       const [, amount, unit] = match;
@@ -43,20 +43,20 @@ module.exports = {
         d: 24 * 60 * 60
       };
 
-      seconds = Math.min(parseInt(amount) * multipliers[unit], 21600); // Max 6 hours
+      seconds = Math.min(parseInt(amount) * multipliers[unit], 21600); // Tối đa 6 giờ
     }
 
     try {
       await message.channel.setRateLimitPerUser(seconds);
       
       if (seconds === 0) {
-        await message.reply({ content: `✅ Slowmode has been disabled in this channel.` });
+        await message.reply({ content: `✅ Chế độ chậm đã bị tắt trong kênh này.` });
       } else {
-        await message.reply({ content: `✅ Slowmode has been set to ${duration} in this channel.` });
+        await message.reply({ content: `✅ Chế độ chậm đã được đặt thành ${duration} trong kênh này.` });
       }
     } catch (error) {
-      console.error('Slowmode error:', error);
-      await message.reply({ content: 'There was an error setting slowmode!', flags: [64] });
+      console.error('Lỗi chế độ chậm:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi đặt chế độ chậm!', flags: [64] });
     }
   },
 
@@ -69,7 +69,7 @@ module.exports = {
     } else {
       const match = duration.match(/^(\d+)([smhd])$/);
       if (!match) {
-        return interaction.reply({ content: 'Invalid duration! Use: 5s, 1m, off', flags: [64] });
+        return interaction.reply({ content: 'Thời lượng không hợp lệ! Sử dụng: 5s, 1m, off', flags: [64] });
       }
 
       const [, amount, unit] = match;
@@ -80,20 +80,20 @@ module.exports = {
         d: 24 * 60 * 60
       };
 
-      seconds = Math.min(parseInt(amount) * multipliers[unit], 21600); // Max 6 hours
+      seconds = Math.min(parseInt(amount) * multipliers[unit], 21600); // Tối đa 6 giờ
     }
 
     try {
       await interaction.channel.setRateLimitPerUser(seconds);
       
       if (seconds === 0) {
-        await interaction.reply({ content: `✅ Slowmode has been disabled in this channel.` });
+        await interaction.reply({ content: `✅ Chế độ chậm đã bị tắt trong kênh này.` });
       } else {
-        await interaction.reply({ content: `✅ Slowmode has been set to ${duration} in this channel.` });
+        await interaction.reply({ content: `✅ Chế độ chậm đã được đặt thành ${duration} trong kênh này.` });
       }
     } catch (error) {
-      console.error('Slowmode error:', error);
-      await interaction.reply({ content: 'There was an error setting slowmode!', flags: [64] });
+      console.error('Lỗi chế độ chậm:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi đặt chế độ chậm!', flags: [64] });
     }
   }
 };

@@ -1,35 +1,35 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'unban',
-  description: 'Unban a user from the server',
+  description: 'Bỏ cấm người dùng khỏi máy chủ',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('unban')
-    .setDescription('Unban a user from the server')
+    .setDescription('Bỏ cấm người dùng khỏi máy chủ')
     .addStringOption(option => 
       option.setName('user')
-        .setDescription('The user ID or username to unban')
+        .setDescription('ID người dùng hoặc tên để bỏ cấm')
         .setRequired(true))
     .addStringOption(option => 
       option.setName('reason')
-        .setDescription('The reason for unbanning')
+        .setDescription('Lý do bỏ cấm')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-      return message.reply({ content: 'You do not have permission to unban members!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền bỏ cấm thành viên!', flags: [64] });
     }
 
     const userIdentifier = args[0];
     if (!userIdentifier) {
-      return message.reply({ content: 'Please provide a user ID or username to unban!', flags: [64] });
+      return message.reply({ content: 'Vui lòng cung cấp ID người dùng hoặc tên để bỏ cấm!', flags: [64] });
     }
 
-    const reason = args.slice(1).join(' ') || 'No reason provided';
+    const reason = args.slice(1).join(' ') || 'Không có lý do cung cấp';
 
     try {
       const bannedUsers = await message.guild.bans.fetch();
@@ -39,20 +39,20 @@ module.exports = {
       );
 
       if (!bannedUser) {
-        return message.reply({ content: 'Could not find a banned user with that identifier!', flags: [64] });
+        return message.reply({ content: 'Không tìm thấy người dùng bị cấm với mã định danh đó!', flags: [64] });
       }
 
       await message.guild.bans.remove(bannedUser.user, reason);
-      await message.reply({ content: `✅ Successfully unbanned ${bannedUser.user.tag} for: ${reason}` });
+      await message.reply({ content: `✅ Đã bỏ cấm thành công ${bannedUser.user.tag} vì: ${reason}` });
     } catch (error) {
-      console.error('Unban error:', error);
-      await message.reply({ content: 'There was an error trying to unban that user!', flags: [64] });
+      console.error('Lỗi bỏ cấm:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi cố gắng bỏ cấm người dùng đó!', flags: [64] });
     }
   },
 
   async executeSlash(interaction) {
     const userIdentifier = interaction.options.getString('user');
-    const reason = interaction.options.getString('reason') || 'No reason provided';
+    const reason = interaction.options.getString('reason') || 'Không có lý do cung cấp';
 
     try {
       const bannedUsers = await interaction.guild.bans.fetch();
@@ -62,14 +62,14 @@ module.exports = {
       );
 
       if (!bannedUser) {
-        return interaction.reply({ content: 'Could not find a banned user with that identifier!', flags: [64] });
+        return interaction.reply({ content: 'Không tìm thấy người dùng bị cấm với mã định danh đó!', flags: [64] });
       }
 
       await interaction.guild.bans.remove(bannedUser.user, reason);
-      await interaction.reply({ content: `✅ Successfully unbanned ${bannedUser.user.tag} for: ${reason}` });
+      await interaction.reply({ content: `✅ Đã bỏ cấm thành công ${bannedUser.user.tag} vì: ${reason}` });
     } catch (error) {
-      console.error('Unban error:', error);
-      await interaction.reply({ content: 'There was an error trying to unban that user!', flags: [64] });
+      console.error('Lỗi bỏ cấm:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi cố gắng bỏ cấm người dùng đó!', flags: [64] });
     }
   }
 };

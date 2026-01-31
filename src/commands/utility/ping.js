@@ -1,26 +1,26 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Utility',
+  category: 'Tiện ích',
   name: 'ping',
-  description: 'Check the bot latency',
+  description: 'Kiểm tra độ trễ của bot',
   
-  // Slash command data
+  // Dữ liệu lệnh dấu gạch chéo
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Check the bot latency'),
+    .setDescription('Kiểm tra độ trễ của bot'),
 
-  // Prefix command execution
+  // Thực thi lệnh tiền tố
   async executePrefix(message, args, client) {
-    const sent = await message.reply('Pinging...');
+    const sent = await message.reply('Đang ping...');
     const timeDiff = sent.createdTimestamp - message.createdTimestamp;
-    await sent.edit(`🏓 Pong! Latency: ${timeDiff}ms`);
+    await sent.edit(`Pong! Độ trễ: ${timeDiff}ms`);
   },
 
-  // Slash command execution
+  // Thực thi lệnh dấu gạch chéo
   async executeSlash(interaction) {
-    const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+    const sent = await interaction.reply({ content: 'Đang ping...', fetchReply: true });
     const timeDiff = sent.createdTimestamp - interaction.createdTimestamp;
-    await interaction.editReply(`🏓 Pong! Latency: ${timeDiff}ms`);
+    await interaction.editReply(`Pong! Độ trễ: ${timeDiff}ms`);
   }
 };

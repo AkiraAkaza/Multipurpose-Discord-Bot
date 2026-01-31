@@ -1,21 +1,21 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'nowplaying',
-  description: 'Show currently playing song information',
+  description: 'Hiển thị thông tin bài hát đang phát',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('nowplaying')
-    .setDescription('Show currently playing song information'),
+    .setDescription('Hiển thị thông tin bài hát đang phát'),
 
   async executePrefix(message, args, client) {
     const player = client.riffy?.players.get(message.guild.id);
     
     if (!player || !player.current) {
       return message.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -26,24 +26,24 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🎵 Now Playing',
+        title: '🎵 Đang phát',
         description: `**${track.info.title}**`,
         thumbnail: { url: track.info.thumbnail },
         fields: [
-          { name: '👤 Artist', value: track.info.author, inline: true },
-          { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true },
-          { name: '🔂 Loop', value: player.loop === 'none' ? 'Off' : player.loop, inline: true },
-          { name: '📊 Progress', value: `\`${progressBar}\``, inline: false }
+          { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+          { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true },
+          { name: '🔂 Lặp lại', value: player.loop === 'none' ? 'Tắt' : player.loop, inline: true },
+          { name: '📊 Tiến độ', value: `\`${progressBar}\``, inline: false }
         ],
-        footer: { text: `👤 Requested by: ${track.info.requester.username}` },
+        footer: { text: `👤 Được yêu cầu bởi: ${track.info.requester.username}` },
         timestamp: new Date().toISOString()
       };
 
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Nowplaying error:', error);
-      await message.reply({ content: '❌ There was an error getting now playing info!', flags: [64] });
+      console.error('Lỗi đang phát:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi lấy thông tin bài hát đang phát!', flags: [64] });
     }
   },
 
@@ -52,7 +52,7 @@ module.exports = {
     
     if (!player || !player.current) {
       return interaction.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -63,24 +63,24 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🎵 Now Playing',
+        title: '🎵 Đang phát',
         description: `**${track.info.title}**`,
         thumbnail: { url: track.info.thumbnail },
         fields: [
-          { name: '👤 Artist', value: track.info.author, inline: true },
-          { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true },
-          { name: '🔂 Loop', value: player.loop === 'none' ? 'Off' : player.loop, inline: true },
-          { name: '📊 Progress', value: `\`${progressBar}\``, inline: false }
+          { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+          { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true },
+          { name: '🔂 Lặp lại', value: player.loop === 'none' ? 'Tắt' : player.loop, inline: true },
+          { name: '📊 Tiến độ', value: `\`${progressBar}\``, inline: false }
         ],
-        footer: { text: `👤 Requested by: ${track.info.requester.username}` },
+        footer: { text: `👤 Được yêu cầu bởi: ${track.info.requester.username}` },
         timestamp: new Date().toISOString()
       };
 
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Nowplaying error:', error);
-      await interaction.reply({ content: '❌ There was an error getting now playing info!', flags: [64] });
+      console.error('Lỗi đang phát:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi lấy thông tin bài hát đang phát!', flags: [64] });
     }
   }
 };

@@ -15,17 +15,17 @@ function formatDuration(milliseconds) {
 }
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'volume',
-  description: 'Adjust the music volume',
+  description: 'Điều chỉnh âm lượng nhạc',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('volume')
-    .setDescription('Adjust the music volume')
+    .setDescription('Điều chỉnh âm lượng nhạc')
     .addIntegerOption(option => 
       option.setName('level')
-        .setDescription('Volume level (0-100)')
+        .setDescription('Mức âm lượng (0-100)')
         .setMinValue(0)
         .setMaxValue(100)),
 
@@ -33,7 +33,7 @@ module.exports = {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to adjust volume!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để điều chỉnh âm lượng!', 
         flags: [64]
       });
     }
@@ -41,21 +41,21 @@ module.exports = {
     const player = client.riffy?.players.get(message.guild.id);
     if (!player) {
       return message.reply({ 
-        content: '❌ There is no music playing right now!', 
+        content: '❌ Không có nhạc nào đang phát lúc này!', 
         flags: [64]
       });
     }
 
     try {
-      // If no volume provided, show current volume
+      // Nếu không có âm lượng, hiển thị âm lượng hiện tại
       if (!args[0]) {
         const currentVolume = player.volume || 100;
         const embed = {
           color: 0x1DB954,
-          title: '🔊 Current Volume',
-          description: `Current volume is **${currentVolume}%**`,
+          title: '🔊 Âm lượng Hiện tại',
+          description: `Âm lượng hiện tại là **${currentVolume}%**`,
           fields: [
-            { name: '🎵 Now Playing', value: player.current ? player.current.info.title : 'Nothing', inline: true }
+            { name: '🎵 Đang phát', value: player.current ? player.current.info.title : 'Không có gì', inline: true }
           ],
           timestamp: new Date().toISOString()
         };
@@ -66,7 +66,7 @@ module.exports = {
       
       if (isNaN(volume) || volume < 0 || volume > 100) {
         return message.reply({ 
-          content: '❌ Please provide a volume level between 0 and 100!', 
+          content: '❌ Vui lòng cung cấp mức âm lượng từ 0 đến 100!', 
           flags: [64]
         });
       }
@@ -75,11 +75,11 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🔊 Volume Adjusted',
-        description: `Volume has been set to **${volume}%**`,
+        title: '🔊 Âm lượng đã điều chỉnh',
+        description: `Âm lượng đã được đặt thành **${volume}%**`,
         fields: [
-          { name: '📊 Current Volume', value: `${volume}%`, inline: true },
-          { name: '🎵 Now Playing', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Nothing', inline: true }
+          { name: '📊 Âm lượng Hiện tại', value: `${volume}%`, inline: true },
+          { name: '🎵 Đang phát', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Không có gì', inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -87,8 +87,8 @@ module.exports = {
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Volume error:', error);
-      await message.reply({ content: '❌ There was an error adjusting the volume!', flags: [64] });
+      console.error('Lỗi âm lượng:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi điều chỉnh âm lượng!', flags: [64] });
     }
   },
 
@@ -96,7 +96,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to adjust volume!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để điều chỉnh âm lượng!', 
         flags: [64]
       });
     }
@@ -104,7 +104,7 @@ module.exports = {
     const player = client.riffy?.players.get(interaction.guild.id);
     if (!player) {
       return interaction.reply({ 
-        content: '❌ There is no music playing right now!', 
+        content: '❌ Không có nhạc nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -112,15 +112,15 @@ module.exports = {
     try {
       const volume = interaction.options.getInteger('level');
       
-      // If no volume provided, show current volume
+      // Nếu không có âm lượng, hiển thị âm lượng hiện tại
       if (volume === null) {
         const currentVolume = player.volume || 100;
         const embed = {
           color: 0x1DB954,
-          title: '🔊 Current Volume',
-          description: `Current volume is **${currentVolume}%**`,
+          title: '🔊 Âm lượng Hiện tại',
+          description: `Âm lượng hiện tại là **${currentVolume}%**`,
           fields: [
-            { name: '🎵 Now Playing', value: player.current ? player.current.info.title : 'Nothing', inline: true }
+            { name: '🎵 Đang phát', value: player.current ? player.current.info.title : 'Không có gì', inline: true }
           ],
           timestamp: new Date().toISOString()
         };
@@ -129,7 +129,7 @@ module.exports = {
       
       if (volume < 0 || volume > 100) {
         return interaction.reply({ 
-          content: '❌ Volume must be between 0 and 100!', 
+          content: '❌ Âm lượng phải từ 0 đến 100!', 
           flags: [64]
         });
       }
@@ -138,11 +138,11 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🔊 Volume Adjusted',
-        description: `Volume has been set to **${volume}%**`,
+        title: '🔊 Âm lượng đã điều chỉnh',
+        description: `Âm lượng đã được đặt thành **${volume}%**`,
         fields: [
-          { name: '📊 Current Volume', value: `${volume}%`, inline: true },
-          { name: '🎵 Now Playing', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Nothing', inline: true }
+          { name: '📊 Âm lượng Hiện tại', value: `${volume}%`, inline: true },
+          { name: '🎵 Đang phát', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Không có gì', inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -150,8 +150,8 @@ module.exports = {
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Volume error:', error);
-      await interaction.reply({ content: '❌ There was an error adjusting the volume!', flags: [64] });
+      console.error('Lỗi âm lượng:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi điều chỉnh âm lượng!', flags: [64] });
     }
   }
 };

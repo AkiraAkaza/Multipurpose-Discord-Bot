@@ -2,18 +2,18 @@ const { SlashCommandBuilder } = require('discord.js');
 const https = require('https');
 
 module.exports = {
-  category: 'Fun',
+  category: 'Giải trí',
   name: 'meme',
-  description: 'Get a random meme',
+  description: 'Lấy một meme ngẫu nhiên',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('meme')
-    .setDescription('Get a random meme'),
+    .setDescription('Lấy một meme ngẫu nhiên'),
 
   async executePrefix(message, args, client) {
     try {
-      // Using a public meme API with built-in https module
+      // Sử dụng API meme công khai với mô-đun https tích hợp sẵn
       const data = await new Promise((resolve, reject) => {
         https.get('https://meme-api.com/gimme', (res) => {
           let data = '';
@@ -29,12 +29,12 @@ module.exports = {
       });
 
       if (!data.url) {
-        return message.reply({ content: 'Could not fetch a meme at this time. Try again later!', flags: [64] });
+        return message.reply({ content: 'Không thể lấy meme vào lúc này. Vui lòng thử lại sau!', flags: [64] });
       }
 
       const embed = {
         color: 0x00D26A,
-        title: `🎭 ${data.title || 'Random Meme'}`,
+        title: `🎭 ${data.title || 'Meme Ngẫu Nhiên'}`,
         image: { url: data.url },
         footer: { text: `👍 ${data.ups} ups` },
         timestamp: new Date().toISOString()
@@ -42,14 +42,14 @@ module.exports = {
 
       await message.reply({ embeds: [embed] });
     } catch (error) {
-      console.error('Meme error:', error);
-      await message.reply({ content: 'Could not fetch a meme at this time. Try again later!', flags: [64] });
+      console.error('Lỗi Meme:', error);
+      await message.reply({ content: 'Không thể lấy meme vào lúc này. Vui lòng thử lại sau!', flags: [64] });
     }
   },
 
   async executeSlash(interaction) {
     try {
-      // Using a public meme API with built-in https module
+      // Sử dụng API meme công khai với mô-đun https tích hợp sẵn
       const data = await new Promise((resolve, reject) => {
         https.get('https://meme-api.com/gimme', (res) => {
           let data = '';
@@ -65,12 +65,12 @@ module.exports = {
       });
 
       if (!data.url) {
-        return interaction.reply({ content: 'Could not fetch a meme at this time. Try again later!', flags: [64] });
+        return interaction.reply({ content: 'Không thể lấy meme vào lúc này. Vui lòng thử lại sau!', flags: [64] });
       }
 
       const embed = {
         color: 0x00D26A,
-        title: `🎭 ${data.title || 'Random Meme'}`,
+        title: `🎭 ${data.title || 'Meme Ngẫu Nhiên'}`,
         image: { url: data.url },
         footer: { text: `👍 ${data.ups} ups` },
         timestamp: new Date().toISOString()
@@ -78,8 +78,8 @@ module.exports = {
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
-      console.error('Meme error:', error);
-      await interaction.reply({ content: 'Could not fetch a meme at this time. Try again later!', flags: [64] });
+      console.error('Lỗi Meme:', error);
+      await interaction.reply({ content: 'Không thể lấy meme vào lúc này. Vui lòng thử lại sau!', flags: [64] });
     }
   }
 };

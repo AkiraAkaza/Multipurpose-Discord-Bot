@@ -1,17 +1,17 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Fun',
+  category: 'Giải trí',
   name: 'roll',
-  description: 'Roll a dice with specified sides',
+  description: 'Tung một con xúc xắc với số mặt được chỉ định',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('roll')
-    .setDescription('Roll a dice with specified sides')
+    .setDescription('Tung một con xúc xắc với số mặt được chỉ định')
     .addIntegerOption(option => 
       option.setName('sides')
-        .setDescription('Number of sides on the dice')
+        .setDescription('Số mặt của xúc xắc')
         .setRequired(false)
         .setMinValue(2)
         .setMaxValue(1000)),
@@ -20,15 +20,15 @@ module.exports = {
     const sides = parseInt(args[0]) || 6;
     
     if (sides < 2 || sides > 1000) {
-      return message.reply({ content: 'Please choose a number between 2 and 1000!', flags: [64] });
+      return message.reply({ content: 'Vui lòng chọn một số từ 2 đến 1000!', flags: [64] });
     }
 
     const roll = Math.floor(Math.random() * sides) + 1;
 
     const embed = {
       color: 0x2ECC71,
-      title: '🎲 Dice Roll',
-      description: `You rolled a **${sides}**-sided dice and got: **${roll}**`,
+      title: '🎲 Tung Xúc Xắc',
+      description: `Bạn đã tung một xúc xắc **${sides}** mặt và nhận được: **${roll}**`,
       timestamp: new Date().toISOString()
     };
 
@@ -42,8 +42,8 @@ module.exports = {
 
     const embed = {
       color: 0x2ECC71,
-      title: '🎲 Dice Roll',
-      description: `You rolled a **${sides}**-sided dice and got: **${roll}**`,
+      title: '🎲 Tung Xúc Xắc',
+      description: `Bạn đã tung một xúc xắc **${sides}** mặt và nhận được: **${roll}**`,
       timestamp: new Date().toISOString()
     };
 

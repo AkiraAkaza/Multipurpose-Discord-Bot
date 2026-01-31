@@ -1,21 +1,21 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'lyrics',
-  description: 'Get lyrics for the currently playing song',
+  description: 'Lấy lời bài hát hiện đang phát',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('lyrics')
-    .setDescription('Get lyrics for the currently playing song'),
+    .setDescription('Lấy lời bài hát hiện đang phát'),
 
   async executePrefix(message, args, client) {
     const player = client.riffy?.players.get(message.guild.id);
     
     if (!player || !player.queue.current) {
       return message.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -24,17 +24,17 @@ module.exports = {
       const track = player.queue.current;
       const query = `${track.info.author} ${track.info.title}`;
       
-      // Using a simple lyrics search (in production, you'd use a proper lyrics API)
+      // Sử dụng tìm kiếm lời bài hát đơn giản (trong sản xuất, bạn sẽ sử dụng API lời bài hát thích hợp)
       const lyrics = await searchLyrics(query);
       
       if (!lyrics) {
         return message.reply({ 
-          content: `❌ Could not find lyrics for **${track.info.title}** by **${track.info.author}**!`, 
+          content: `❌ Không thể tìm thấy lời bài hát cho **${track.info.title}** của **${track.info.author}**!`, 
           flags: [64]
         });
       }
 
-      // Split lyrics if too long
+      // Chia lời bài hát nếu quá dài
       const maxChars = 2000;
       const lyricsChunks = [];
       for (let i = 0; i < lyrics.length; i += maxChars) {
@@ -43,26 +43,26 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: `🎵 Lyrics - ${track.info.title}`,
+        title: `🎵 Lời bài hát - ${track.info.title}`,
         description: lyricsChunks[0],
         fields: [
-          { name: '👤 Artist', value: track.info.author, inline: true },
-          { name: '🎵 Song', value: track.info.title, inline: true }
+          { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+          { name: '🎵 Bài hát', value: track.info.title, inline: true }
         ],
-        footer: { text: '⚠️ Lyrics are for educational purposes only' },
+        footer: { text: '⚠️ Lời bài hát chỉ dùng cho mục đích giáo dục' },
         timestamp: new Date().toISOString()
       };
 
       const replyMessage = await message.reply({ embeds: [embed] });
       
-      // Send additional chunks if needed
+      // Gửi các phần bổ sung nếu cần
       for (let i = 1; i < lyricsChunks.length; i++) {
         await replyMessage.channel.send(`\`${lyricsChunks[i]}\``);
       }
       
     } catch (error) {
-      console.error('Lyrics error:', error);
-      await message.reply({ content: '❌ There was an error getting lyrics!', flags: [64] });
+      console.error('Lỗi lời bài hát:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi lấy lời bài hát!', flags: [64] });
     }
   },
 
@@ -71,7 +71,7 @@ module.exports = {
     
     if (!player || !player.queue.current) {
       return interaction.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -84,12 +84,12 @@ module.exports = {
       
       if (!lyrics) {
         return interaction.reply({ 
-          content: `❌ Could not find lyrics for **${track.info.title}** by **${track.info.author}**!`, 
+          content: `❌ Không thể tìm thấy lời bài hát cho **${track.info.title}** của **${track.info.author}**!`, 
           flags: [64]
         });
       }
 
-      // Split lyrics if too long
+      // Chia lời bài hát nếu quá dài
       const maxChars = 2000;
       const lyricsChunks = [];
       for (let i = 0; i < lyrics.length; i += maxChars) {
@@ -98,40 +98,40 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: `🎵 Lyrics - ${track.info.title}`,
+        title: `🎵 Lời bài hát - ${track.info.title}`,
         description: lyricsChunks[0],
         fields: [
-          { name: '👤 Artist', value: track.info.author, inline: true },
-          { name: '🎵 Song', value: track.info.title, inline: true }
+          { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+          { name: '🎵 Bài hát', value: track.info.title, inline: true }
         ],
-        footer: { text: '⚠️ Lyrics are for educational purposes only' },
+        footer: { text: '⚠️ Lời bài hát chỉ dùng cho mục đích giáo dục' },
         timestamp: new Date().toISOString()
       };
 
       const replyMessage = await interaction.reply({ embeds: [embed] });
       
-      // Send additional chunks if needed
+      // Gửi các phần bổ sung nếu cần
       for (let i = 1; i < lyricsChunks.length; i++) {
         await replyMessage.channel.send(`\`${lyricsChunks[i]}\``);
       }
       
     } catch (error) {
-      console.error('Lyrics error:', error);
-      await interaction.reply({ content: '❌ There was an error getting lyrics!', flags: [64] });
+      console.error('Lỗi lời bài hát:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi lấy lời bài hát!', flags: [64] });
     }
   }
 };
 
 async function searchLyrics(query) {
-  // Simple mock lyrics search (in production, use a real lyrics API)
+  // Tìm kiếm lời bài hát giả đơn giản (trong sản xuất, sử dụng API lời bài hát thực)
   const lyrics = {
     'Never Gonna Give You Up': 'Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry, never gonna say goodbye',
     'Bohemian Rhapsody': 'Is this the real life?\nIs this just fantasy?\nCaught in a landslide\nNo escape from reality',
     'Sweet Child O Mine': 'Sweet child o\' mine\nSweet love of mine\nHe\'s got eyes of the bluest skies',
-    default: `🎶 ${query} 🎶\n\n[ Lyrics would be displayed here ]\n\n🎵 Full lyrics not available`
+    default: `🎶 ${query} 🎶\n\n[ Lời bài hát sẽ được hiển thị ở đây ]\n\n🎵 Lời bài hát đầy đủ không có sẵn`
   };
 
-  // Simple matching logic
+  // Lôgic khớp đơn giản
   for (const [song, lyrics] of Object.entries(lyrics)) {
     if (query.toLowerCase().includes(song.toLowerCase())) {
       return lyrics;

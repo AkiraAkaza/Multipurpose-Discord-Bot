@@ -15,23 +15,23 @@ function formatDuration(milliseconds) {
 }
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'play',
-  description: 'Play a song or add it to the queue',
+  description: 'Phát bài hát hoặc thêm vào hàng chờ',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Play a song or add it to the queue')
+    .setDescription('Phát bài hát hoặc thêm vào hàng chờ')
     .addStringOption(option => 
       option.setName('query')
-        .setDescription('Song name or URL to play')
+        .setDescription('Tên bài hát hoặc URL để phát')
         .setRequired(true)),
 
   async executePrefix(message, args, client) {
     if (!args[0]) {
       return message.reply({ 
-        content: 'Usage: `!play <song name or URL>`', 
+        content: 'Cách sử dụng: `!play <tên bài hát hoặc URL>`', 
         flags: [64]
       });
     }
@@ -39,7 +39,7 @@ module.exports = {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to play music!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để phát nhạc!', 
         flags: [64]
       });
     }
@@ -47,7 +47,7 @@ module.exports = {
     const permissions = voiceChannel.permissionsFor(message.guild.members.me);
     if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
       return message.reply({ 
-        content: '❌ I need permission to connect and speak in your voice channel!', 
+        content: '❌ Tôi cần quyền kết nối và nói chuyện trong kênh thoại của bạn!', 
         flags: [64]
       });
     }
@@ -72,8 +72,8 @@ module.exports = {
           
           const embed = {
             color: 0x1DB954,
-            title: '📋 Playlist Added',
-            description: `Added **${tracks.length}** tracks from playlist: **${playlistInfo.name}**`,
+            title: '📋 Danh sách phát đã thêm',
+            description: `Đã thêm **${tracks.length}** bài hát từ danh sách phát: **${playlistInfo.name}**`,
             thumbnail: { url: playlistInfo.thumbnail },
             timestamp: new Date().toISOString()
           };
@@ -87,12 +87,12 @@ module.exports = {
           
           const embed = {
             color: 0x1DB954,
-            title: '🎵 Track Added',
-            description: `Added **${track.info.title}** to queue`,
+            title: '🎵 Bài hát đã thêm',
+            description: `Đã thêm **${track.info.title}** vào hàng chờ`,
             thumbnail: { url: track.info.thumbnail },
             fields: [
-              { name: '👤 Artist', value: track.info.author, inline: true },
-              { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true }
+              { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+              { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true }
             ],
             timestamp: new Date().toISOString()
           };
@@ -101,7 +101,7 @@ module.exports = {
           if (!player.playing && !player.paused) return player.play();
         } else {
           await message.reply({ 
-            content: '❌ No results found for your query!', 
+            content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
             flags: [64]
           });
         }
@@ -118,7 +118,7 @@ module.exports = {
           const track = tracks[0];
           if (!track) {
             return message.reply({ 
-              content: '❌ No results found for your query!', 
+              content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
               flags: [64]
             });
           }
@@ -132,7 +132,7 @@ module.exports = {
 
           track.info.requester = message.author;
           
-          // Wait for player to be ready before playing
+          // Đợi trình phát sẵn sàng trước khi phát
           const waitForPlayer = () => {
             return new Promise((resolve, reject) => {
               const checkPlayer = () => {
@@ -148,13 +148,13 @@ module.exports = {
           
           try {
             await waitForPlayer();
-            console.log('Player connected (prefix), adding to queue');
+            console.log('Trình phát đã kết nối (tiền tố), thêm vào hàng chờ');
             newPlayer.queue.add(track);
-            console.log('Track added to queue, size:', newPlayer.queue.size);
+            console.log('Bài hát đã thêm vào hàng chờ, kích thước:', newPlayer.queue.size);
             
-            // Try calling play with a delay
+            // Thử gọi phát với độ trễ
             setTimeout(() => {
-              console.log('Attempting delayed play (prefix):', {
+              console.log('Cố gắng phát bị trễ (tiền tố):', {
                 queueSize: newPlayer.queue.size,
                 playing: newPlayer.playing,
                 paused: newPlayer.paused
@@ -162,22 +162,22 @@ module.exports = {
               try {
                 newPlayer.play();
               } catch (playError) {
-                console.error('Delayed play error (prefix):', playError);
+                console.error('Lỗi phát bị trễ (tiền tố):', playError);
               }
             }, 500);
           } catch (error) {
-            console.error('Player connection error (prefix):', error);
+            console.error('Lỗi kết nối trình phát (tiền tố):', error);
           }
           
           const embed = {
             color: 0x1DB954,
-            title: '🎵 Now Playing',
+            title: '🎵 Đang phát',
             description: `**${track.info.title}**`,
             thumbnail: { url: track.info.thumbnail },
             fields: [
-              { name: '👤 Artist', value: track.info.author, inline: true },
-              { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true },
-              { name: '👤 Requester', value: message.author.username, inline: true }
+              { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+              { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true },
+              { name: '👤 Người yêu cầu', value: message.author.username, inline: true }
             ],
             timestamp: new Date().toISOString()
           };
@@ -185,16 +185,16 @@ module.exports = {
           await message.reply({ embeds: [embed] });
         } else {
           await message.reply({ 
-            content: '❌ No results found for your query!', 
+            content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
             flags: [64]
           });
         }
       }
       
     } catch (error) {
-      console.error('Play command error:', error);
+      console.error('Lỗi lệnh phát:', error);
       await message.reply({ 
-        content: '❌ An error occurred while trying to play the song!', 
+        content: '❌ Đã xảy ra lỗi khi cố gắng phát bài hát!', 
         flags: [64]
       });
     }
@@ -206,7 +206,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to play music!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để phát nhạc!', 
         flags: [64]
       });
     }
@@ -214,7 +214,7 @@ module.exports = {
     const permissions = voiceChannel.permissionsFor(interaction.guild.members.me);
     if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
       return interaction.reply({ 
-        content: '❌ I need permission to connect and speak in your voice channel!', 
+        content: '❌ Tôi cần quyền kết nối và nói chuyện trong kênh thoại của bạn!', 
         flags: [64]
       });
     }
@@ -238,8 +238,8 @@ module.exports = {
           
           const embed = {
             color: 0x1DB954,
-            title: '📋 Playlist Added',
-            description: `Added **${tracks.length}** tracks from playlist: **${playlistInfo.name}**`,
+            title: '📋 Danh sách phát đã thêm',
+            description: `Đã thêm **${tracks.length}** bài hát từ danh sách phát: **${playlistInfo.name}**`,
             thumbnail: { url: playlistInfo.thumbnail },
             timestamp: new Date().toISOString()
           };
@@ -253,12 +253,12 @@ module.exports = {
           
           const embed = {
             color: 0x1DB954,
-            title: '🎵 Track Added',
-            description: `Added **${track.info.title}** to queue`,
+            title: '🎵 Bài hát đã thêm',
+            description: `Đã thêm **${track.info.title}** vào hàng chờ`,
             thumbnail: { url: track.info.thumbnail },
             fields: [
-              { name: '👤 Artist', value: track.info.author, inline: true },
-              { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true }
+              { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+              { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true }
             ],
             timestamp: new Date().toISOString()
           };
@@ -267,7 +267,7 @@ module.exports = {
           if (!player.playing && !player.paused) return player.play();
         } else {
           await interaction.reply({ 
-            content: '❌ No results found for your query!', 
+            content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
             flags: [64]
           });
         }
@@ -283,7 +283,7 @@ module.exports = {
           const track = tracks[0];
           if (!track) {
             return interaction.reply({ 
-              content: '❌ No results found for your query!', 
+              content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
               flags: [64]
             });
           }
@@ -297,7 +297,7 @@ module.exports = {
 
           track.info.requester = interaction.user;
           
-          // Wait for player to be ready before playing
+          // Đợi trình phát sẵn sàng trước khi phát
           const waitForPlayer = () => {
             return new Promise((resolve, reject) => {
               const checkPlayer = () => {
@@ -313,13 +313,13 @@ module.exports = {
           
           try {
             await waitForPlayer();
-            console.log('Player connected, adding to queue');
+            console.log('Trình phát đã kết nối, thêm vào hàng chờ');
             newPlayer.queue.add(track);
-            console.log('Track added to queue, size:', newPlayer.queue.size);
+            console.log('Bài hát đã thêm vào hàng chờ, kích thước:', newPlayer.queue.size);
             
-            // Try calling play with a delay
+            // Thử gọi phát với độ trễ
             setTimeout(() => {
-              console.log('Attempting delayed play:', {
+              console.log('Cố gắng phát bị trễ:', {
                 queueSize: newPlayer.queue.size,
                 playing: newPlayer.playing,
                 paused: newPlayer.paused
@@ -327,15 +327,15 @@ module.exports = {
               try {
                 newPlayer.play();
               } catch (playError) {
-                console.error('Delayed play error:', playError);
+                console.error('Lỗi phát bị trễ:', playError);
               }
             }, 500);
           } catch (error) {
-            console.error('Player connection error:', error);
+            console.error('Lỗi kết nối trình phát:', error);
           }
           
-          // Debug: Log player structure
-          console.log('Player created:', {
+          // Gỡ lỗi: Ghi lại cấu trúc trình phát
+          console.log('Trình phát được tạo:', {
             guildId: interaction.guild.id,
             playerExists: !!client.riffy.players.get(interaction.guild.id),
             playerState: newPlayer.state,
@@ -344,13 +344,13 @@ module.exports = {
           
           const embed = {
             color: 0x1DB954,
-            title: '🎵 Now Playing',
+            title: '🎵 Đang phát',
             description: `**${track.info.title}**`,
             thumbnail: { url: track.info.thumbnail },
             fields: [
-              { name: '👤 Artist', value: track.info.author, inline: true },
-              { name: '⏱️ Duration', value: formatDuration(track.info.length), inline: true },
-              { name: '👤 Requester', value: interaction.user.username, inline: true }
+              { name: '👤 Nghệ sĩ', value: track.info.author, inline: true },
+              { name: '⏱️ Thời lượng', value: formatDuration(track.info.length), inline: true },
+              { name: '👤 Người yêu cầu', value: interaction.user.username, inline: true }
             ],
             timestamp: new Date().toISOString()
           };
@@ -358,16 +358,16 @@ module.exports = {
           await interaction.reply({ embeds: [embed] });
         } else {
           await interaction.reply({ 
-            content: '❌ No results found for your query!', 
+            content: '❌ Không tìm thấy kết quả cho truy vấn của bạn!', 
             flags: [64]
           });
         }
       }
       
     } catch (error) {
-      console.error('Play command error:', error);
+      console.error('Lỗi lệnh phát:', error);
       await interaction.reply({ 
-        content: '❌ An error occurred while trying to play the song!', 
+        content: '❌ Đã xảy ra lỗi khi cố gắng phát bài hát!', 
         flags: [64]
       });
     }

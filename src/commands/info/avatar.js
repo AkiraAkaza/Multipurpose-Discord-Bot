@@ -1,17 +1,17 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Info',
+  category: 'Thông tin',
   name: 'avatar',
-  description: 'Get a user\'s avatar',
+  description: 'Lấy avatar của người dùng',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('avatar')
-    .setDescription('Get a user\'s avatar')
+    .setDescription('Lấy avatar của người dùng')
     .addUserOption(option => 
       option.setName('user')
-        .setDescription('The user to get the avatar of')
+        .setDescription('Người dùng để lấy avatar')
         .setRequired(false)),
 
   async executePrefix(message, args, client) {
@@ -19,7 +19,7 @@ module.exports = {
     
     const embed = {
       color: 0x00D26A,
-      title: `${user.username}'s Avatar`,
+      title: `Avatar của ${user.username}`,
       image: { 
         url: user.displayAvatarURL({ 
           dynamic: true, 
@@ -27,7 +27,7 @@ module.exports = {
         }) 
       },
       footer: { 
-        text: `Click the image to open in browser` 
+        text: `Nhấp vào hình ảnh để mở trong trình duyệt` 
       },
       timestamp: new Date().toISOString()
     };
@@ -40,7 +40,7 @@ module.exports = {
     
     const embed = {
       color: 0x00D26A,
-      title: `${user.username}'s Avatar`,
+      title: `Avatar của ${user.username}`,
       image: { 
         url: user.displayAvatarURL({ 
           dynamic: true, 
@@ -48,7 +48,7 @@ module.exports = {
         }) 
       },
       footer: { 
-        text: `Click the image to open in browser` 
+        text: `Nhấp vào hình ảnh để mở trong trình duyệt` 
       },
       timestamp: new Date().toISOString()
     };

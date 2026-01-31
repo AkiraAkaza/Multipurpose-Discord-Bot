@@ -1,33 +1,33 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Info',
+  category: 'Thông tin',
   name: 'userinfo',
-  description: 'Get information about a user',
+  description: 'Lấy thông tin về người dùng',
   
-  // Slash command data
+  // Dữ liệu lệnh   (/)
   data: new SlashCommandBuilder()
     .setName('userinfo')
-    .setDescription('Get information about a user')
+    .setDescription('Lấy thông tin về người dùng')
     .addUserOption(option => 
       option.setName('target')
-        .setDescription('The user to get info about')
+        .setDescription('Người dùng để lấy thông tin')
         .setRequired(false)),
 
-  // Prefix command execution
+  // Thực thi lệnh tiền tố
   async executePrefix(message, args, client) {
     const user = message.mentions.users.first() || message.author;
     const member = message.guild.members.cache.get(user.id);
 
     const embed = {
       color: 0x0099FF,
-      title: `User Information - ${user.username}`,
+      title: `Thông tin Người dùng - ${user.username}`,
       thumbnail: { url: user.displayAvatarURL({ dynamic: true }) },
       fields: [
-        { name: 'Username', value: user.tag, inline: true },
+        { name: 'Tên người dùng', value: user.tag, inline: true },
         { name: 'ID', value: user.id, inline: true },
-        { name: 'Joined Server', value: member ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : 'N/A', inline: true },
-        { name: 'Account Created', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true }
+        { name: 'Gia nhập máy chủ', value: member ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : 'N/A', inline: true },
+        { name: 'Tài khoản được tạo', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true }
       ],
       timestamp: new Date().toISOString()
     };
@@ -35,20 +35,20 @@ module.exports = {
     await message.reply({ embeds: [embed] });
   },
 
-  // Slash command execution
+  // Thực thi lệnh  (/)
   async executeSlash(interaction) {
     const user = interaction.options.getUser('target') || interaction.user;
     const member = interaction.guild.members.cache.get(user.id);
 
     const embed = {
       color: 0x0099FF,
-      title: `User Information - ${user.username}`,
+      title: `Thông tin Người dùng - ${user.username}`,
       thumbnail: { url: user.displayAvatarURL({ dynamic: true }) },
       fields: [
-        { name: 'Username', value: user.tag, inline: true },
+        { name: 'Tên người dùng', value: user.tag, inline: true },
         { name: 'ID', value: user.id, inline: true },
-        { name: 'Joined Server', value: member ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : 'N/A', inline: true },
-        { name: 'Account Created', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true }
+        { name: 'Gia nhập máy chủ', value: member ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : 'N/A', inline: true },
+        { name: 'Tài khoản được tạo', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true }
       ],
       timestamp: new Date().toISOString()
     };

@@ -1,94 +1,94 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'timeout',
-  description: 'Timeout a user for a specified duration',
+  description: 'Hết thời gian chờ một người dùng trong thời gian quy định',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('timeout')
-    .setDescription('Timeout a user for a specified duration')
+    .setDescription('Hết thời gian chờ một người dùng trong thời gian quy định')
     .addUserOption(option => 
       option.setName('user')
-        .setDescription('The user to timeout')
+        .setDescription('Người dùng cần hết thời gian chờ')
         .setRequired(true))
     .addStringOption(option => 
       option.setName('duration')
-        .setDescription('Timeout duration (e.g., 1m, 1h, 1d)')
+        .setDescription('Thời lượng hết thời gian chờ (ví dụ: 1m, 1h, 1d)')
         .setRequired(true))
     .addStringOption(option => 
       option.setName('reason')
-        .setDescription('The reason for timeout')
+        .setDescription('Lý do hết thời gian chờ')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
-      return message.reply({ content: 'You do not have permission to timeout members!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền hết thời gian chờ thành viên!', flags: [64] });
     }
 
     const user = message.mentions.users.first();
     if (!user) {
-      return message.reply({ content: 'Please mention a user to timeout!', flags: [64] });
+      return message.reply({ content: 'Vui lòng đề cập đến một người dùng để hết thời gian chờ!', flags: [64] });
     }
 
     const duration = args[1];
     if (!duration) {
-      return message.reply({ content: 'Please specify a duration (e.g., 1m, 1h, 1d)!', flags: [64] });
+      return message.reply({ content: 'Vui lòng chỉ định một thời lượng (ví dụ: 1m, 1h, 1d)!', flags: [64] });
     }
 
     const member = message.guild.members.cache.get(user.id);
     if (!member) {
-      return message.reply({ content: 'That user is not in this server!', flags: [64] });
+      return message.reply({ content: 'Người dùng đó không ở trong máy chủ này!', flags: [64] });
     }
 
     if (!member.moderatable) {
-      return message.reply({ content: 'I cannot timeout this user!', flags: [64] });
+      return message.reply({ content: 'Tôi không thể hết thời gian chờ người dùng này!', flags: [64] });
     }
 
-    const reason = args.slice(2).join(' ') || 'No reason provided';
+    const reason = args.slice(2).join(' ') || 'Không có lý do cung cấp';
     const timeoutDuration = parseDuration(duration);
 
     if (!timeoutDuration) {
-      return message.reply({ content: 'Invalid duration! Use: 1s, 1m, 1h, 1d', flags: [64] });
+      return message.reply({ content: 'Thời lượng không hợp lệ! Sử dụng: 1s, 1m, 1h, 1d', flags: [64] });
     }
 
     try {
       await member.timeout(timeoutDuration, reason);
-      await message.reply({ content: `✅ Successfully timed out ${user.tag} for ${duration} - ${reason}` });
+      await message.reply({ content: `✅ Đã hết thời gian chờ thành công ${user.tag} trong ${duration} - ${reason}` });
     } catch (error) {
-      console.error('Timeout error:', error);
-      await message.reply({ content: 'There was an error trying to timeout that user!', flags: [64] });
+      console.error('Lỗi hết thời gian chờ:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi cố gắng hết thời gian chờ người dùng đó!', flags: [64] });
     }
   },
 
   async executeSlash(interaction) {
     const user = interaction.options.getUser('user');
     const duration = interaction.options.getString('duration');
-    const reason = interaction.options.getString('reason') || 'No reason provided';
+    const reason = interaction.options.getString('reason') || 'Không có lý do cung cấp';
 
     const member = interaction.guild.members.cache.get(user.id);
     if (!member) {
-      return interaction.reply({ content: 'That user is not in this server!', flags: [64] });
+      return interaction.reply({ content: 'Người dùng đó không ở trong máy chủ này!', flags: [64] });
     }
 
     if (!member.moderatable) {
-      return interaction.reply({ content: 'I cannot timeout this user!', flags: [64] });
+      return interaction.reply({ content: 'Tôi không thể hết thời gian chờ người dùng này!', flags: [64] });
     }
 
     const timeoutDuration = parseDuration(duration);
 
     if (!timeoutDuration) {
-      return interaction.reply({ content: 'Invalid duration! Use: 1s, 1m, 1h, 1d', flags: [64] });
+      return interaction.reply({ content: 'Thời lượng không hợp lệ! Sử dụng: 1s, 1m, 1h, 1d', flags: [64] });
     }
 
     try {
       await member.timeout(timeoutDuration, reason);
-      await interaction.reply({ content: `✅ Successfully timed out ${user.tag} for ${duration} - ${reason}` });
+      await interaction.reply({ content: `✅ Đã hết thời gian chờ thành công ${user.tag} trong ${duration} - ${reason}` });
     } catch (error) {
-      console.error('Timeout error:', error);
-      await interaction.reply({ content: 'There was an error trying to timeout that user!', flags: [64] });
+      console.error('Lỗi hết thời gian chờ:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi cố gắng hết thời gian chờ người dùng đó!', flags: [64] });
     }
   }
 };

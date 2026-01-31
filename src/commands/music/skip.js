@@ -15,17 +15,17 @@ function formatDuration(milliseconds) {
 }
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'skip',
-  description: 'Skip the current song',
+  description: 'Bỏ qua bài hát hiện tại',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('skip')
-    .setDescription('Skip the current song')
+    .setDescription('Bỏ qua bài hát hiện tại')
     .addIntegerOption(option => 
       option.setName('amount')
-        .setDescription('Number of songs to skip (default: 1)')
+        .setDescription('Số bài hát cần bỏ qua (mặc định: 1)')
         .setMinValue(1)
         .setMaxValue(10)),
 
@@ -33,7 +33,7 @@ module.exports = {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to skip songs!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để bỏ qua bài hát!', 
         flags: [64]
       });
     }
@@ -41,7 +41,7 @@ module.exports = {
     const player = client.riffy?.players.get(message.guild.id);
     if (!player || !player.current) {
       return message.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -61,11 +61,11 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: '⏭️ Song Skipped!',
-        description: `Successfully skipped **${skipped}** song${skipped !== 1 ? 's' : ''}!`,
+        title: '⏭️ Bài hát đã bỏ qua!',
+        description: `Đã bỏ qua thành công **${skipped}** bài hát${skipped !== 1 ? '' : ''}!`,
         fields: [
-          { name: '📊 Queue Size', value: `${player.queue.size}`, inline: true },
-          { name: '🎵 Now Playing', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Nothing', inline: true }
+          { name: '📊 Kích thước Hàng chờ', value: `${player.queue.size}`, inline: true },
+          { name: '🎵 Đang phát', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Không có gì', inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -73,8 +73,8 @@ module.exports = {
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Skip error:', error);
-      await message.reply({ content: '❌ There was an error skipping the song!', flags: [64] });
+      console.error('Lỗi bỏ qua:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi bỏ qua bài hát!', flags: [64] });
     }
   },
 
@@ -82,7 +82,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to skip songs!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để bỏ qua bài hát!', 
         flags: [64]
       });
     }
@@ -90,7 +90,7 @@ module.exports = {
     const player = client.riffy?.players.get(interaction.guild.id);
     if (!player || !player.current) {
       return interaction.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -110,11 +110,11 @@ module.exports = {
 
       const embed = {
         color: 0x1DB954,
-        title: '⏭️ Song Skipped!',
-        description: `Successfully skipped **${skipped}** song${skipped !== 1 ? 's' : ''}!`,
+        title: '⏭️ Bài hát đã bỏ qua!',
+        description: `Đã bỏ qua thành công **${skipped}** bài hát${skipped !== 1 ? '' : ''}!`,
         fields: [
-          { name: '📊 Queue Size', value: `${player.queue.size}`, inline: true },
-          { name: '🎵 Now Playing', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Nothing', inline: true }
+          { name: '📊 Kích thước Hàng chờ', value: `${player.queue.size}`, inline: true },
+          { name: '🎵 Đang phát', value: player.current ? `${player.current.info.title} (${formatDuration(player.current.info.length)})` : 'Không có gì', inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -122,8 +122,8 @@ module.exports = {
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Skip error:', error);
-      await interaction.reply({ content: '❌ There was an error skipping the song!', flags: [64] });
+      console.error('Lỗi bỏ qua:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi bỏ qua bài hát!', flags: [64] });
     }
   }
 };

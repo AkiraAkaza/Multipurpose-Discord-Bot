@@ -1,17 +1,17 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'warnings',
-  description: 'Check warnings for a user',
+  description: 'Kiểm tra cảnh báo cho một người dùng',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('warnings')
-    .setDescription('Check warnings for a user')
+    .setDescription('Kiểm tra cảnh báo cho một người dùng')
     .addUserOption(option => 
       option.setName('user')
-        .setDescription('The user to check warnings for')
+        .setDescription('Người dùng cần kiểm tra cảnh báo')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
@@ -22,16 +22,16 @@ module.exports = {
     const userWarnings = warnings.get(user.id) || [];
 
     if (userWarnings.length === 0) {
-      return message.reply({ content: `${user.tag} has no warnings!` });
+      return message.reply({ content: `${user.tag} không có cảnh báo nào!` });
     }
 
     const embed = {
       color: 0xFF9800,
-      title: `⚠️ Warnings for ${user.tag}`,
-      description: `Total warnings: ${userWarnings.length}`,
+      title: `⚠️ Cảnh báo cho ${user.tag}`,
+      description: `Tổng cảnh báo: ${userWarnings.length}`,
       fields: userWarnings.map((warning, index) => ({
-        name: `Warning #${index + 1}`,
-        value: `**Reason:** ${warning.reason}\n**Date:** <t:${Math.floor(new Date(warning.timestamp).getTime() / 1000)}:F>\n**Moderator:** <@${warning.moderatorId}>`,
+        name: `Cảnh báo #${index + 1}`,
+        value: `**Lý do:** ${warning.reason}\n**Ngày:** <t:${Math.floor(new Date(warning.timestamp).getTime() / 1000)}:F>\n**Người kiểm duyệt:** <@${warning.moderatorId}>`,
         inline: false
       })),
       timestamp: new Date().toISOString()
@@ -47,16 +47,16 @@ module.exports = {
     const userWarnings = warnings.get(user.id) || [];
 
     if (userWarnings.length === 0) {
-      return interaction.reply({ content: `${user.tag} has no warnings!` });
+      return interaction.reply({ content: `${user.tag} không có cảnh báo nào!` });
     }
 
     const embed = {
       color: 0xFF9800,
-      title: `⚠️ Warnings for ${user.tag}`,
-      description: `Total warnings: ${userWarnings.length}`,
+      title: `⚠️ Cảnh báo cho ${user.tag}`,
+      description: `Tổng cảnh báo: ${userWarnings.length}`,
       fields: userWarnings.map((warning, index) => ({
-        name: `Warning #${index + 1}`,
-        value: `**Reason:** ${warning.reason}\n**Date:** <t:${Math.floor(new Date(warning.timestamp).getTime() / 1000)}:F>\n**Moderator:** <@${warning.moderatorId}>`,
+        name: `Cảnh báo #${index + 1}`,
+        value: `**Lý do:** ${warning.reason}\n**Ngày:** <t:${Math.floor(new Date(warning.timestamp).getTime() / 1000)}:F>\n**Người kiểm duyệt:** <@${warning.moderatorId}>`,
         inline: false
       })),
       timestamp: new Date().toISOString()

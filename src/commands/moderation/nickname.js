@@ -1,41 +1,41 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'nickname',
-  description: 'Change a user\'s nickname',
+  description: 'Thay đổi biệt danh của người dùng',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('nickname')
-    .setDescription('Change a user\'s nickname')
+    .setDescription('Thay đổi biệt danh của người dùng')
     .addUserOption(option => 
       option.setName('user')
-        .setDescription('The user to change nickname for')
+        .setDescription('Người dùng cần thay đổi biệt danh')
         .setRequired(true))
     .addStringOption(option => 
       option.setName('nickname')
-        .setDescription('The new nickname (use "reset" to remove)')
+        .setDescription('Biệt danh mới (sử dụng "reset" để xóa)')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.ManageNicknames)) {
-      return message.reply({ content: 'You do not have permission to manage nicknames!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền quản lý biệt danh!', flags: [64] });
     }
 
     const user = message.mentions.users.first();
     if (!user) {
-      return message.reply({ content: 'Please mention a user!', flags: [64] });
+      return message.reply({ content: 'Vui lòng đề cập đến một người dùng!', flags: [64] });
     }
 
     const member = message.guild.members.cache.get(user.id);
     if (!member) {
-      return message.reply({ content: 'That user is not in this server!', flags: [64] });
+      return message.reply({ content: 'Người dùng đó không ở trong máy chủ này!', flags: [64] });
     }
 
     if (!member.manageable) {
-      return message.reply({ content: 'I cannot change this user\'s nickname!', flags: [64] });
+      return message.reply({ content: 'Tôi không thể thay đổi biệt danh của người dùng này!', flags: [64] });
     }
 
     const nickname = args.slice(1).join(' ');
@@ -43,16 +43,16 @@ module.exports = {
     try {
       if (nickname === 'reset') {
         await member.setNickname(null);
-        await message.reply({ content: `✅ Reset ${user.tag}'s nickname` });
+        await message.reply({ content: `✅ Đã đặt lại biệt danh của ${user.tag}` });
       } else if (nickname) {
         await member.setNickname(nickname);
-        await message.reply({ content: `✅ Changed ${user.tag}'s nickname to: **${nickname}**` });
+        await message.reply({ content: `✅ Đã thay đổi biệt danh của ${user.tag} thành: **${nickname}**` });
       } else {
-        await message.reply({ content: 'Please provide a nickname or use "reset" to remove it!', flags: [64] });
+        await message.reply({ content: 'Vui lòng cung cấp một biệt danh hoặc sử dụng "reset" để xóa nó!', flags: [64] });
       }
     } catch (error) {
-      console.error('Nickname error:', error);
-      await message.reply({ content: 'There was an error changing the nickname!', flags: [64] });
+      console.error('Lỗi biệt danh:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi thay đổi biệt danh!', flags: [64] });
     }
   },
 
@@ -62,26 +62,26 @@ module.exports = {
 
     const member = interaction.guild.members.cache.get(user.id);
     if (!member) {
-      return interaction.reply({ content: 'That user is not in this server!', flags: [64] });
+      return interaction.reply({ content: 'Người dùng đó không ở trong máy chủ này!', flags: [64] });
     }
 
     if (!member.manageable) {
-      return interaction.reply({ content: 'I cannot change this user\'s nickname!', flags: [64] });
+      return interaction.reply({ content: 'Tôi không thể thay đổi biệt danh của người dùng này!', flags: [64] });
     }
 
     try {
       if (nickname === 'reset') {
         await member.setNickname(null);
-        await interaction.reply({ content: `✅ Reset ${user.tag}'s nickname` });
+        await interaction.reply({ content: `✅ Đã đặt lại biệt danh của ${user.tag}` });
       } else if (nickname) {
         await member.setNickname(nickname);
-        await interaction.reply({ content: `✅ Changed ${user.tag}'s nickname to: **${nickname}**` });
+        await interaction.reply({ content: `✅ Đã thay đổi biệt danh của ${user.tag} thành: **${nickname}**` });
       } else {
-        await interaction.reply({ content: 'Please provide a nickname!', flags: [64] });
+        await interaction.reply({ content: 'Vui lòng cung cấp một biệt danh!', flags: [64] });
       }
     } catch (error) {
-      console.error('Nickname error:', error);
-      await interaction.reply({ content: 'There was an error changing the nickname!', flags: [64] });
+      console.error('Lỗi biệt danh:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi thay đổi biệt danh!', flags: [64] });
     }
   }
 };

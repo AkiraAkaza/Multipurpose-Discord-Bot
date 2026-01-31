@@ -1,17 +1,17 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'roleinfo',
-  description: 'Get information about a role',
+  description: 'Lấy thông tin về một vai trò',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('roleinfo')
-    .setDescription('Get information about a role')
+    .setDescription('Lấy thông tin về một vai trò')
     .addRoleOption(option => 
       option.setName('role')
-        .setDescription('The role to get info about')
+        .setDescription('Vai trò cần lấy thông tin')
         .setRequired(false)),
 
   async executePrefix(message, args, client) {
@@ -30,22 +30,22 @@ module.exports = {
     }
 
     if (!role) {
-      return message.reply({ content: 'Could not find that role!', flags: [64] });
+      return message.reply({ content: 'Không tìm thấy vai trò đó!', flags: [64] });
     }
 
     const embed = {
       color: role.color || 0x0099FF,
-      title: `🎭 Role Information: ${role.name}`,
+      title: `🎭 Thông tin vai trò: ${role.name}`,
       thumbnail: { url: role.iconURL() },
       fields: [
-        { name: '🆔 Role ID', value: role.id, inline: true },
-        { name: '🏷️ Name', value: role.name, inline: true },
-        { name: '📅 Created', value: `<t:${Math.floor(role.createdTimestamp / 1000)}:R>`, inline: true },
-        { name: '👥 Members', value: `${role.members.size}`, inline: true },
-        { name: '🎨 Color', value: role.hexColor || 'Default', inline: true },
-        { name: '📍 Position', value: `${role.position}`, inline: true },
-        { name: '📋 Permissions', value: role.permissions.bitfield.toString(), inline: false },
-        { name: '⚙️ Features', value: role.tags?.botId ? 'Bot Role' : 'Normal Role', inline: true }
+        { name: '🆔 ID Vai trò', value: role.id, inline: true },
+        { name: '🏷️ Tên', value: role.name, inline: true },
+        { name: '📅 Được tạo', value: `<t:${Math.floor(role.createdTimestamp / 1000)}:R>`, inline: true },
+        { name: '👥 Thành viên', value: `${role.members.size}`, inline: true },
+        { name: '🎨 Màu sắc', value: role.hexColor || 'Mặc định', inline: true },
+        { name: '📍 Vị trí', value: `${role.position}`, inline: true },
+        { name: '📋 Quyền hạn', value: role.permissions.bitfield.toString(), inline: false },
+        { name: '⚙️ Tính năng', value: role.tags?.botId ? 'Vai trò Bot' : 'Vai trò thường', inline: true }
       ],
       timestamp: new Date().toISOString()
     };
@@ -62,17 +62,17 @@ module.exports = {
 
     const embed = {
       color: role.color || 0x0099FF,
-      title: `🎭 Role Information: ${role.name}`,
+      title: `🎭 Thông tin vai trò: ${role.name}`,
       thumbnail: { url: role.iconURL() },
       fields: [
-        { name: '🆔 Role ID', value: role.id, inline: true },
-        { name: '🏷️ Name', value: role.name, inline: true },
-        { name: '📅 Created', value: `<t:${Math.floor(role.createdTimestamp / 1000)}:R>`, inline: true },
-        { name: '👥 Members', value: `${role.members.size}`, inline: true },
-        { name: '🎨 Color', value: role.hexColor || 'Default', inline: true },
-        { name: '📍 Position', value: `${role.position}`, inline: true },
-        { name: '📋 Permissions', value: role.permissions.bitfield.toString(), inline: false },
-        { name: '⚙️ Features', value: role.tags?.botId ? 'Bot Role' : 'Normal Role', inline: true }
+        { name: '🆔 ID Vai trò', value: role.id, inline: true },
+        { name: '🏷️ Tên', value: role.name, inline: true },
+        { name: '📅 Được tạo', value: `<t:${Math.floor(role.createdTimestamp / 1000)}:R>`, inline: true },
+        { name: '👥 Thành viên', value: `${role.members.size}`, inline: true },
+        { name: '🎨 Màu sắc', value: role.hexColor || 'Mặc định', inline: true },
+        { name: '📍 Vị trí', value: `${role.position}`, inline: true },
+        { name: '📋 Quyền hạn', value: role.permissions.bitfield.toString(), inline: false },
+        { name: '⚙️ Tính năng', value: role.tags?.botId ? 'Vai trò Bot' : 'Vai trò thường', inline: true }
       ],
       timestamp: new Date().toISOString()
     };

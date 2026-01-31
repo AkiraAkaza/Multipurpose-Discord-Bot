@@ -1,51 +1,51 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'unlock',
-  description: 'Unlock the channel to allow sending messages',
+  description: 'Mở khóa kênh để cho phép gửi tin nhắn',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('unlock')
-    .setDescription('Unlock the channel to allow sending messages')
+    .setDescription('Mở khóa kênh để cho phép gửi tin nhắn')
     .addStringOption(option => 
       option.setName('reason')
-        .setDescription('Reason for unlocking the channel')
+        .setDescription('Lý do mở khóa kênh')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.ManageChannels)) {
-      return message.reply({ content: 'You do not have permission to manage channels!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền quản lý kênh!', flags: [64] });
     }
 
-    const reason = args.join(' ') || 'No reason provided';
+    const reason = args.join(' ') || 'Không có lý do cung cấp';
 
     try {
       await message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
         SendMessages: null
       });
 
-      await message.reply({ content: `🔓 Channel has been unlocked. Reason: ${reason}` });
+      await message.reply({ content: `🔓 Kênh đã được mở khóa. Lý do: ${reason}` });
     } catch (error) {
-      console.error('Unlock error:', error);
-      await message.reply({ content: 'There was an error unlocking the channel!', flags: [64] });
+      console.error('Lỗi mở khóa:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi mở khóa kênh!', flags: [64] });
     }
   },
 
   async executeSlash(interaction) {
-    const reason = interaction.options.getString('reason') || 'No reason provided';
+    const reason = interaction.options.getString('reason') || 'Không có lý do cung cấp';
 
     try {
       await interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
         SendMessages: null
       });
 
-      await interaction.reply({ content: `🔓 Channel has been unlocked. Reason: ${reason}` });
+      await interaction.reply({ content: `🔓 Kênh đã được mở khóa. Lý do: ${reason}` });
     } catch (error) {
-      console.error('Unlock error:', error);
-      await interaction.reply({ content: 'There was an error unlocking the channel!', flags: [64] });
+      console.error('Lỗi mở khóa:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi mở khóa kênh!', flags: [64] });
     }
   }
 };

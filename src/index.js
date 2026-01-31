@@ -1,13 +1,8 @@
-const {
-  Client,
-  GatewayIntentBits,
-  GatewayDispatchEvents,
-} = require("discord.js");
+const { Client, GatewayIntentBits, GatewayDispatchEvents } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 const chalk = require("chalk");
-const connectDB = require("./utils/database");
 const { Riffy } = require("riffy");
 
 const client = new Client({
@@ -40,13 +35,10 @@ client.riffy = new Riffy(client, nodes, {
 });
 
 async function startBot() {
-  console.log(chalk.blue.bold("🚀 Starting Discord Bot..."));
+  console.log(chalk.blue.bold("🚀 Đang khởi động Discord Bot..."));
 
   try {
-    console.log("⏳ Connecting to MongoDB...");
-    await connectDB();
-
-    console.log("⏳ Loading events...");
+    console.log("⏳ Đang tải các sự kiện...");
     const eventsPath = path.join(__dirname, "events");
     const eventFiles = fs
       .readdirSync(eventsPath)
@@ -60,22 +52,22 @@ async function startBot() {
       } else {
         client.on(event.name, (...args) => event.execute(...args, client));
       }
-      console.log(`✓ Loaded event: ${event.name}`);
+      console.log(`✓ Đã tải sự kiện: ${event.name}`);
     }
 
-    // Riffy event handlers
+    // Xử lý sự kiện Riffy
     client.riffy.on("nodeConnect", (node) => {
-      console.log(`Node "${node.name}" connected.`);
+      console.log(`Node "${node.name}" đã kết nối.`);
     });
 
     client.riffy.on("nodeError", (node, error) => {
       console.log(
-        `Node "${node.name}" encountered an error: ${error.message}.`
+        `Node "${node.name}" gặp lỗi: ${error.message}.`
       );
     });
 
     client.riffy.on("trackStart", async (player, track) => {
-      console.log('trackStart event fired:', {
+      console.log('Sự kiện trackStart được kích hoạt:', {
         guildId: player.guildId,
         trackTitle: track.info.title,
         playing: player.playing,
@@ -83,7 +75,7 @@ async function startBot() {
       });
       const channel = client.channels.cache.get(player.textChannel);
       channel.send(
-        `Now playing: \`${track.info.title}\` by \`${track.info.author}\`.`
+        `Đang phát: \`${track.info.title}\` của \`${track.info.author}\`.`
       );
     });
 
@@ -94,7 +86,7 @@ async function startBot() {
         player.autoplay(player);
       } else {
         player.destroy();
-        channel.send("Queue has ended.");
+        channel.send("Hàng chờ đã kết thúc.");
       }
     });
 
@@ -109,20 +101,20 @@ async function startBot() {
       client.riffy.updateVoiceState(d);
     });
 
-    console.log("⏳ Logging into Discord...");
+    console.log("⏳ Đang đăng nhập vào Discord...");
     await client.login(process.env.DISCORD_TOKEN);
   } catch (error) {
-    console.error(chalk.red.bold("✗ Failed to start bot:"), error);
+    console.error(chalk.red.bold("✗ Không thể khởi động bot:"), error);
     process.exit(1);
   }
 }
 
 process.on("unhandledRejection", (error) => {
-  console.error(chalk.red.bold("✗ Unhandled Promise Rejection:"), error);
+  console.error(chalk.red.bold("✗ Lỗi Promise chưa được xử lý:"), error);
 });
 
 process.on("uncaughtException", (error) => {
-  console.error(chalk.red.bold("✗ Uncaught Exception:"), error);
+  console.error(chalk.red.bold("✗ Ngoại lệ chưa được bắt:"), error);
   process.exit(1);
 });
 

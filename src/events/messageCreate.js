@@ -1,3 +1,5 @@
+const { loadData, saveData } = require("../utils/data");
+
 module.exports = {
   name: 'messageCreate',
   async execute(message, client) {
@@ -11,6 +13,17 @@ module.exports = {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
+    const data = loadData();
+    const banned = data.bannedUsers[message.author.id];
+
+    if (banned) {
+      if (Date.now() < banned.expiresAt) {
+          return message.reply(`Bạn bị cấm dùng bot đến <t:${Math.floor(banned.expiresAt / 1000)}:F>`);
+      } else {
+          delete data.bannedUsers[message.author.id];
+          saveData(data);
+      }
+    }
 
     const command = client.commands.get(commandName);
 
@@ -19,8 +32,8 @@ module.exports = {
     try {
       await command.executePrefix(message, args, client);
     } catch (error) {
-      console.error('Error executing prefix command:', error);
-      await message.reply('There was an error while executing this command!');
+      console.error('Lỗi khi thực thi lệnh tiền tố:', error);
+      await message.reply('Đã xảy ra lỗi khi thực thi lệnh này!');
     }
   }
 };

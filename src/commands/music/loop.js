@@ -15,29 +15,29 @@ function formatDuration(milliseconds) {
 }
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'loop',
-  description: 'Toggle music loop mode',
+  description: 'Bật/tắt chế độ lặp nhạc',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('loop')
-    .setDescription('Toggle music loop mode')
+    .setDescription('Bật/tắt chế độ lặp nhạc')
     .addStringOption(option => 
       option.setName('mode')
-        .setDescription('Loop mode or "toggle"')
+        .setDescription('Chế độ lặp hoặc "bật/tắt"')
         .addChoices(
-          { name: '🔁 Toggle Loop', value: 'toggle' },
-          { name: '🔂 Loop Queue', value: 'queue' },
-          { name: '🔁 Loop Song', value: 'song' },
-          { name: '⏹ Disable Loop', value: 'off' }
+          { name: '🔁 Bật/Tắt Lặp', value: 'toggle' },
+          { name: '🔂 Lặp Hàng chờ', value: 'queue' },
+          { name: '🔁 Lặp Bài hát', value: 'song' },
+          { name: '⏹ Tắt Lặp', value: 'off' }
         )),
 
   async executePrefix(message, args, client) {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to use loop!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để sử dụng lặp!', 
         flags: [64]
       });
     }
@@ -45,7 +45,7 @@ module.exports = {
     const player = client.riffy?.players.get(message.guild.id);
     if (!player || !player.current) {
       return message.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -58,23 +58,23 @@ module.exports = {
       switch (mode) {
         case 'toggle':
           newMode = player.loop === 'none' ? 'queue' : 'none';
-          description = player.loop === 'none' ? '🔂 Loop queue enabled' : '⏹ Loop disabled';
+          description = player.loop === 'none' ? '🔂 Lặp hàng chờ đã bật' : '⏹ Lặp đã tắt';
           break;
         case 'queue':
           newMode = 'queue';
-          description = '🔂 Loop queue enabled';
+          description = '🔂 Lặp hàng chờ đã bật';
           break;
         case 'song':
           newMode = 'song';
-          description = '🔁 Loop song enabled';
+          description = '🔁 Lặp bài hát đã bật';
           break;
         case 'off':
           newMode = 'none';
-          description = '⏹ Loop disabled';
+          description = '⏹ Lặp đã tắt';
           break;
         default:
           return message.reply({ 
-            content: '❌ Invalid mode! Use: toggle, queue, song, or off', 
+            content: '❌ Chế độ không hợp lệ! Sử dụng: toggle, queue, song, hoặc off', 
             flags: [64]
           });
       }
@@ -83,11 +83,11 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🔁 Loop Mode Changed',
+        title: '🔁 Chế độ Lặp Đã Thay đổi',
         description: description,
         fields: [
-          { name: '📊 Current Mode', value: newMode === 'none' ? 'Off' : newMode, inline: true },
-          { name: '🎵 Now Playing', value: `${player.current.info.title} (${formatDuration(player.current.info.length)})`, inline: true }
+          { name: '📊 Chế độ Hiện tại', value: newMode === 'none' ? 'Tắt' : newMode, inline: true },
+          { name: '🎵 Đang phát', value: `${player.current.info.title} (${formatDuration(player.current.info.length)})`, inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -95,8 +95,8 @@ module.exports = {
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Loop error:', error);
-      await message.reply({ content: '❌ There was an error changing loop mode!', flags: [64] });
+      console.error('Lỗi lặp:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi thay đổi chế độ lặp!', flags: [64] });
     }
   },
 
@@ -104,7 +104,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to use loop!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để sử dụng lặp!', 
         flags: [64]
       });
     }
@@ -112,7 +112,7 @@ module.exports = {
     const player = client.riffy?.players.get(interaction.guild.id);
     if (!player || !player.current) {
       return interaction.reply({ 
-        content: '❌ There is no song playing right now!', 
+        content: '❌ Không có bài hát nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -125,19 +125,19 @@ module.exports = {
       switch (mode) {
         case 'toggle':
           newMode = player.loop === 'none' ? 'queue' : 'none';
-          description = player.loop === 'none' ? '🔂 Loop queue enabled' : '⏹ Loop disabled';
+          description = player.loop === 'none' ? '🔂 Lặp hàng chờ đã bật' : '⏹ Lặp đã tắt';
           break;
         case 'queue':
           newMode = 'queue';
-          description = '🔂 Loop queue enabled';
+          description = '🔂 Lặp hàng chờ đã bật';
           break;
         case 'song':
           newMode = 'song';
-          description = '🔁 Loop song enabled';
+          description = '🔁 Lặp bài hát đã bật';
           break;
         case 'off':
           newMode = 'none';
-          description = '⏹ Loop disabled';
+          description = '⏹ Lặp đã tắt';
           break;
       }
 
@@ -145,11 +145,11 @@ module.exports = {
       
       const embed = {
         color: 0x1DB954,
-        title: '🔁 Loop Mode Changed',
+        title: '🔁 Chế độ Lặp Đã Thay đổi',
         description: description,
         fields: [
-          { name: '📊 Current Mode', value: newMode === 'none' ? 'Off' : newMode, inline: true },
-          { name: '🎵 Now Playing', value: `${player.current.info.title} (${formatDuration(player.current.info.length)})`, inline: true }
+          { name: '📊 Chế độ Hiện tại', value: newMode === 'none' ? 'Tắt' : newMode, inline: true },
+          { name: '🎵 Đang phát', value: `${player.current.info.title} (${formatDuration(player.current.info.length)})`, inline: true }
         ],
         timestamp: new Date().toISOString()
       };
@@ -157,8 +157,8 @@ module.exports = {
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Loop error:', error);
-      await interaction.reply({ content: '❌ There was an error changing loop mode!', flags: [64] });
+      console.error('Lỗi lặp:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi thay đổi chế độ lặp!', flags: [64] });
     }
   }
 };

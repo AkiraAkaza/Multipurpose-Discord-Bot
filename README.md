@@ -6,7 +6,6 @@ A feature-rich Discord bot with both slash and prefix commands, MongoDB integrat
 
 - ✅ Global Slash Commands
 - ✅ Prefix Commands  
-- ✅ MongoDB Integration
 - ✅ Category-Based Commands
 - ✅ Moderation Commands
 - ✅ Fun Commands

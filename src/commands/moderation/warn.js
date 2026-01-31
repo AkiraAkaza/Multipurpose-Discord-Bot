@@ -1,38 +1,38 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-  category: 'Moderation',
+  category: 'Kiểm duyệt',
   name: 'warn',
-  description: 'Warn a user',
+  description: 'Cảnh báo một người dùng',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('warn')
-    .setDescription('Warn a user')
+    .setDescription('Cảnh báo một người dùng')
     .addUserOption(option => 
       option.setName('user')
-        .setDescription('The user to warn')
+        .setDescription('Người dùng cần cảnh báo')
         .setRequired(true))
     .addStringOption(option => 
       option.setName('reason')
-        .setDescription('The reason for the warning')
+        .setDescription('Lý do cho cảnh báo')
         .setRequired(false))
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
   async executePrefix(message, args, client) {
     if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
-      return message.reply({ content: 'You do not have permission to warn members!', flags: [64] });
+      return message.reply({ content: 'Bạn không có quyền cảnh báo thành viên!', flags: [64] });
     }
 
     const user = message.mentions.users.first();
     if (!user) {
-      return message.reply({ content: 'Please mention a user to warn!', flags: [64] });
+      return message.reply({ content: 'Vui lòng đề cập đến một người dùng để cảnh báo!', flags: [64] });
     }
 
-    const reason = args.slice(1).join(' ') || 'No reason provided';
+    const reason = args.slice(1).join(' ') || 'Không có lý do cung cấp';
 
     try {
-      // Store warning in database (simplified - you'd normally use a proper database)
+      // Lưu trữ cảnh báo trong cơ sở dữ liệu (đơn giản - bạn thường sẽ sử dụng cơ sở dữ liệu thích hợp)
       const warning = {
         userId: user.id,
         moderatorId: message.author.id,
@@ -40,7 +40,7 @@ module.exports = {
         timestamp: new Date().toISOString()
       };
 
-      // This is a simple approach - in production you'd use MongoDB
+      // Đây là một cách tiếp cận đơn giản - trong sản xuất bạn sẽ sử dụng MongoDB
       const warnings = client.warnings || new Map();
       if (!warnings.has(user.id)) {
         warnings.set(user.id, []);
@@ -48,29 +48,29 @@ module.exports = {
       warnings.get(user.id).push(warning);
       client.warnings = warnings;
 
-      await message.reply({ content: `✅ Successfully warned ${user.tag} for: ${reason}` });
+      await message.reply({ content: `✅ Đã cảnh báo thành công ${user.tag} vì: ${reason}` });
 
-      // Try to DM the user
+      // Cố gắng DM người dùng
       try {
         await user.send({
-          content: `You have been warned in ${message.guild.name}\n**Reason:** ${reason}\n**Moderator:** ${message.author.tag}`
+          content: `Bạn đã bị cảnh báo trong ${message.guild.name}\n**Lý do:** ${reason}\n**Người kiểm duyệt:** ${message.author.tag}`
         });
       } catch (err) {
-        // User has DMs disabled
+        // Người dùng đã tắt DMs
       }
 
     } catch (error) {
-      console.error('Warn error:', error);
-      await message.reply({ content: 'There was an error trying to warn that user!', flags: [64] });
+      console.error('Lỗi cảnh báo:', error);
+      await message.reply({ content: 'Đã xảy ra lỗi khi cố gắng cảnh báo người dùng đó!', flags: [64] });
     }
   },
 
   async executeSlash(interaction) {
     const user = interaction.options.getUser('user');
-    const reason = interaction.options.getString('reason') || 'No reason provided';
+    const reason = interaction.options.getString('reason') || 'Không có lý do cung cấp';
 
     try {
-      // Store warning in database
+      // Lưu trữ cảnh báo trong cơ sở dữ liệu
       const warning = {
         userId: user.id,
         moderatorId: interaction.user.id,
@@ -85,20 +85,20 @@ module.exports = {
       warnings.get(user.id).push(warning);
       interaction.client.warnings = warnings;
 
-      await interaction.reply({ content: `✅ Successfully warned ${user.tag} for: ${reason}` });
+      await interaction.reply({ content: `✅ Đã cảnh báo thành công ${user.tag} vì: ${reason}` });
 
-      // Try to DM the user
+      // Cố gắng DM người dùng
       try {
         await user.send({
-          content: `You have been warned in ${interaction.guild.name}\n**Reason:** ${reason}\n**Moderator:** ${interaction.user.tag}`
+          content: `Bạn đã bị cảnh báo trong ${interaction.guild.name}\n**Lý do:** ${reason}\n**Người kiểm duyệt:** ${interaction.user.tag}`
         });
       } catch (err) {
-        // User has DMs disabled
+        // Người dùng đã tắt DMs
       }
 
     } catch (error) {
-      console.error('Warn error:', error);
-      await interaction.reply({ content: 'There was an error trying to warn that user!', flags: [64] });
+      console.error('Lỗi cảnh báo:', error);
+      await interaction.reply({ content: 'Đã xảy ra lỗi khi cố gắng cảnh báo người dùng đó!', flags: [64] });
     }
   }
 };

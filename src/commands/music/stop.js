@@ -1,20 +1,20 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Music',
+  category: 'Âm nhạc',
   name: 'stop',
-  description: 'Stop the music and clear the queue',
+  description: 'Dừng nhạc và xóa hàng chờ',
   slashOnly: false,
   
   data: new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('Stop the music and clear the queue'),
+    .setDescription('Dừng nhạc và xóa hàng chờ'),
 
   async executePrefix(message, args, client) {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       return message.reply({ 
-        content: '❌ You need to be in a voice channel to stop music!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để dừng nhạc!', 
         flags: [64]
       });
     }
@@ -22,7 +22,7 @@ module.exports = {
     const player = client.riffy?.players.get(message.guild.id);
     if (!player) {
       return message.reply({ 
-        content: '❌ There is no music playing right now!', 
+        content: '❌ Không có nhạc nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -32,16 +32,16 @@ module.exports = {
       
       const embed = {
         color: 0xFF4444,
-        title: '⏹️ Music Stopped',
-        description: 'Music has been stopped and queue has been cleared!',
+        title: '⏹️ Nhạc đã dừng',
+        description: 'Nhạc đã dừng và hàng chờ đã được xóa!',
         timestamp: new Date().toISOString()
       };
 
       await message.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Stop error:', error);
-      await message.reply({ content: '❌ There was an error stopping the music!', flags: [64] });
+      console.error('Lỗi dừng:', error);
+      await message.reply({ content: '❌ Đã xảy ra lỗi khi dừng nhạc!', flags: [64] });
     }
   },
 
@@ -49,7 +49,7 @@ module.exports = {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ 
-        content: '❌ You need to be in a voice channel to stop music!', 
+        content: '❌ Bạn cần phải ở trong một kênh thoại để dừng nhạc!', 
         flags: [64]
       });
     }
@@ -57,7 +57,7 @@ module.exports = {
     const player = client.riffy?.players.get(interaction.guild.id);
     if (!player) {
       return interaction.reply({ 
-        content: '❌ There is no music playing right now!', 
+        content: '❌ Không có nhạc nào đang phát lúc này!', 
         flags: [64]
       });
     }
@@ -67,16 +67,16 @@ module.exports = {
       
       const embed = {
         color: 0xFF4444,
-        title: '⏹️ Music Stopped',
-        description: 'Music has been stopped and queue has been cleared!',
+        title: '⏹️ Nhạc đã dừng',
+        description: 'Nhạc đã dừng và hàng chờ đã được xóa!',
         timestamp: new Date().toISOString()
       };
 
       await interaction.reply({ embeds: [embed] });
       
     } catch (error) {
-      console.error('Stop error:', error);
-      await interaction.reply({ content: '❌ There was an error stopping the music!', flags: [64] });
+      console.error('Lỗi dừng:', error);
+      await interaction.reply({ content: '❌ Đã xảy ra lỗi khi dừng nhạc!', flags: [64] });
     }
   }
 };

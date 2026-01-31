@@ -3,17 +3,17 @@ const { REST, Routes } = require('discord.js');
 const chalk = require('chalk');
 
 module.exports = {
-  name: 'ready',
+  name: 'clientReady',
   once: true,
   async execute(client) {
-    console.log(chalk.blue.bold(`✓ Logged in as ${client.user.tag}`));
-    console.log(chalk.blue.bold(`✓ Ready to serve in ${client.guilds.cache.size} servers`));
+    console.log(chalk.blue.bold(`Đã đăng nhập ${client.user.tag}`));
+    console.log(chalk.blue.bold(`Sẵn sàng phục vụ trong ${client.guilds.cache.size} máy chủ`));
 
     client.config = require('../config');
     client.commands = new Map();
     client.slashCommands = new Map();
 
-    // Initialize Riffy
+    // Khởi tạo Riffy
     client.riffy.init(client.user.id);
 
     loadCommands(client);
@@ -26,17 +26,17 @@ module.exports = {
     const rest = new REST({ version: '10' }).setToken(client.config.token);
 
     try {
-      console.log('⏳ Refreshing global application (/) commands...');
+      console.log('⏳ Đang làm mới các lệnh (/) ...');
 
       await rest.put(
         Routes.applicationCommands(client.config.clientId),
         { body: slashCommands }
       );
 
-      console.log(chalk.green.bold('✓ Successfully reloaded global application (/) commands'));
-      console.log(chalk.yellow('⚠️ Global commands may take up to 1 hour to propagate'));
+      console.log(chalk.green.bold('Đã làm mới thành công các lệnh (/) '));
+      console.log(chalk.yellow('⚠️ Các lệnh (/) có thể mất tới 1 giờ để bắt đầu hoạt động trên tất cả các máy chủ!'));
     } catch (error) {
-      console.error(chalk.red.bold('✗ Error reloading global application (/) commands:'), error);
+      console.error(chalk.red.bold('Lỗi khi làm mới các lệnh (/) :'), error);
     }
 
     client.user.setActivity(`${client.config.prefix}help | /help`, { type: 'WATCHING' });

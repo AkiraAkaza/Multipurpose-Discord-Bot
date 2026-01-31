@@ -28,10 +28,10 @@ const loadCommands = (client) => {
       totalCommands++;
     }
 
-    console.log(`✓ Loaded ${commandFiles.length} commands from ${folder} category`);
+    console.log(`✓ Đã tải ${commandFiles.length} lệnh từ danh mục ${folder}`);
   }
 
-  console.log(`✓ Total commands loaded: ${totalCommands}`);
+  console.log(`✓ Tổng số lệnh đã tải: ${totalCommands}`);
 };
 
 module.exports = { loadCommands };

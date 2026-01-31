@@ -1,28 +1,28 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-  category: 'Info',
+  category: 'Thông tin',
   name: 'help',
-  description: 'Show all available commands',
-  slashOnly: false, // Allow both prefix and slash
+  description: 'Hiển thị tất cả các lệnh có sẵn',
+  slashOnly: false, // Cho phép cả tiền tố và (/)
   
-  // Slash command data
+  // Dữ liệu lệnh (/)
   data: new SlashCommandBuilder()
     .setName('help')
-    .setDescription('Show all available commands')
+    .setDescription('Hiển thị tất cả các lệnh có sẵn')
     .addStringOption(option =>
       option.setName('category')
-        .setDescription('Filter commands by category')
+        .setDescription('Lọc lệnh theo danh mục')
         .addChoices(
-          { name: 'Utility', value: 'utility' },
-          { name: 'Info', value: 'info' },
-          { name: 'Moderation', value: 'moderation' },
-          { name: 'Fun', value: 'fun' },
-          { name: 'Economy', value: 'economy' },
-          { name: 'Music', value: 'music' }
+          { name: 'Tiện ích', value: 'utility' },
+          { name: 'Thông tin', value: 'info' },
+          { name: 'Kiểm duyệt', value: 'moderation' },
+          { name: 'Giải trí', value: 'fun' },
+          { name: 'Kinh tế', value: 'economy' },
+          { name: 'Âm nhạc', value: 'music' }
         )),
 
-  // Prefix command execution
+  // Thực thi lệnh tiền tố
   async executePrefix(message, args, client) {
     const { EmbedBuilder } = require('discord.js');
     
@@ -36,12 +36,12 @@ module.exports = {
 
     const embed = new EmbedBuilder()
       .setColor(0x0099FF)
-      .setTitle('Help Menu')
-      .setDescription('Here are all available commands:');
+      .setTitle('Trình đơn Trợ giúp')
+      .setDescription('Đây là tất cả các lệnh có sẵn:');
 
     Object.keys(categories).forEach(category => {
       const commands = categories[category].map(cmd => `\`${client.config.prefix}${cmd.name}\` - ${cmd.description}`).join('\n');
-      embed.addFields({ name: `${category} Commands`, value: commands });
+      embed.addFields({ name: `Lệnh ${category}`, value: commands });
     });
 
     embed.setTimestamp();
@@ -49,7 +49,7 @@ module.exports = {
     await message.reply({ embeds: [embed] });
   },
 
-  // Slash command execution
+  // Thực thi lệnh (/)
   async executeSlash(interaction) {
     const { commands } = interaction.client;
     const category = interaction.options.getString('category');
@@ -64,22 +64,22 @@ module.exports = {
 
     const embed = new EmbedBuilder()
       .setColor(0x0099FF)
-      .setTitle('Help Menu');
+      .setTitle('Trình đơn Trợ giúp');
 
     if (category) {
       const categoryCommands = categories[category];
       if (categoryCommands) {
-        embed.setDescription(`**${category} Commands:**`);
+        embed.setDescription(`**Lệnh ${category}:**`);
         const commandList = categoryCommands.map(cmd => `\`/${cmd.data.name}\` - ${cmd.data.description}`).join('\n');
-        embed.addFields({ name: 'Commands', value: commandList });
+        embed.addFields({ name: 'Lệnh', value: commandList });
       } else {
-        embed.setDescription('No commands found for this category.');
+        embed.setDescription('Không tìm thấy lệnh nào cho danh mục này.');
       }
     } else {
-      embed.setDescription('Here are all available commands:');
+      embed.setDescription('Đây là tất cả các lệnh có sẵn:');
       Object.keys(categories).forEach(cat => {
         const commandList = categories[cat].map(cmd => `\`/${cmd.data.name}\` - ${cmd.data.description}`).join('\n');
-        embed.addFields({ name: `${cat} Commands`, value: commandList });
+        embed.addFields({ name: `Lệnh ${cat}`, value: commandList });
       });
     }
 
