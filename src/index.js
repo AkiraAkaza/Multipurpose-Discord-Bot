@@ -119,3 +119,16 @@ process.on("uncaughtException", (error) => {
 });
 
 startBot();
+
+const http = require("http");
+
+const PORT = 3000;
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Server Node.js dang chay!");
+});
+
+server.listen(PORT, () => {
+    console.log(`Server dang chay tai http://localhost:${PORT}`);
+});
