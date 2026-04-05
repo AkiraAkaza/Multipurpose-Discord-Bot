@@ -25,6 +25,7 @@
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
-    "riffy": "^1.0.9"
+    "riffy": "^1.0.9",
+    "http": "^0.0.1-security"
   }
 }
